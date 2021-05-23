@@ -42,6 +42,11 @@ public class AdressBook {
        PersonDetail.add(zip);
        PersonDetail.add(phone);
        PersonDetail.add(email);
+
+       for (String str : PersonDetail)
+       {
+           System.out.println(str); 
 	}
 
+}
 }
