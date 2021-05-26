@@ -1,127 +1,96 @@
 package com.adressbook;
-
+import java.util.*;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Scanner;
 
 
 public class AdressBook {
-	public static ArrayList<String> createContact()
-	{
-		ArrayList<String> PersonDetail = new ArrayList<String>(1);
-        Scanner input = new Scanner(System.in);
+	public static Scanner sc = new Scanner(System.in);
+    private static AddressBook addressBook = new AddressBook();
+    public Map<String,AddressBook> addressBookListMap = new HashMap<>();
 
-        System.out.print("Enter the First name : ");
-        String fname = input.nextLine();
+    public void addAddressBook(String bookName){
+        AddressBookMain addBookMain = new AddressBookMain();
+        boolean flag = true;
 
-        System.out.print("Enter the Last name : ");
-        String lname = input.nextLine();
+        while(flag) {
 
-        System.out.print("Enter the Address : ");
-        String address = input.nextLine();
+            System.out.println("1.Add Contact");
+            System.out.println("2.Edit Contact");
+            System.out.println("3.Delete");
+            System.out.println("4.Exit");
+            System.out.println("Enter Choice: ");
 
-        System.out.print("Enter the City : ");
-        String city = input.nextLine();
+            int option = sc.nextInt();
 
-        System.out.print("Enter the state : ");
-        String state = input.nextLine();
+            switch (option)
+            {
+                case 1:
+                        addressBook.addContactDetails();
+                    break;
 
-        System.out.print("Enter the Zip Code : ");
-        String zip = input.nextLine();
+                case 2:
+                    System.out.println("Enter the Person First name to edit details: ");
+                    String personName = sc.next();
 
-        System.out.print("Enter the phone number: ");
-        String phone = input.nextLine();
-        
-        System.out.print("Enter the Email: ");
-        String email = input.nextLine();
-        
-		PersonDetail.add(fname);
-        PersonDetail.add(lname);
-        PersonDetail.add(address);
-        PersonDetail.add(city);
-        PersonDetail.add(state);
-        PersonDetail.add(zip);
-        PersonDetail.add(phone);
-        PersonDetail.add(email);
+                    boolean listEdited = addressBook.editContactDetails(personName);
+                    if (listEdited) {
+                        System.out.println("List Edited Successfully");
+                    } else {
+                        System.out.println("List Cannot be Edited");
+                    }
+                    break;
 
-        for (String str : PersonDetail)
-        {
-            System.out.println(str + " "); 
+                case 3:
+                    System.out.println("Enter the Contact to be deleted:");
+                    String firstName = sc.next();
+                    boolean listDeleted = addressBook.deleteContact(firstName);
+                    if (listDeleted) {
+                        System.out.println("Deleted Contact from the List");
+                    } else {
+                        System.out.println("List Cannot be Deleted");
+                    }
+                    break;
+
+                case 4:
+                    flag =false;
+                    break;
+
+            }
         }
-        return PersonDetail;
-	}
-	
-	public static void editContact( ArrayList<String> personDetail)
-	{
-		ListIterator<String> iterator = personDetail.listIterator();
-		System.out.println("enter old value");
-		Scanner input = new Scanner(System.in);
-		String originalValue = input.nextLine();
-		System.out.println("enter new value");
-		String value = input.nextLine();
-		while (iterator.hasNext()) {
-		     String next = iterator.next();
-		     if (next.equals(originalValue)) {
-		         //Replace element
-		         iterator.set(value);
-		     } 
-		 }
-		 for (String str : personDetail)
-	        {
-	            System.out.println(str + " "); 
-	        }
-	}
-	/**
-	 * delete contact is a function is use to delete the value 
-	 * @param personDetail
-	 * iterator is use to iterate all the details person
-	 * hasNext keyword is use to iterate next value till the array length.
-	 */
-	public static void deleteContact(ArrayList<String> personDetail)
-	{
-		Iterator itr = personDetail.iterator();
-		System.out.println("enter value to delete");
-		Scanner input = new Scanner(System.in);
-		String deleteValue = input.nextLine();
-        while (itr.hasNext())
+    }
+
+
+
+    public static void main(String[] args) {
+        System.out.println("Welcome to the Address Book Management System using Java Stream");
+        AddressBookMain addressBookMain = new AddressBookMain();
+        boolean flag =true;
+        while(flag)
         {
-            String x = (String)itr.next();
-            if (x.equals(deleteValue))
-                itr.remove();
+            System.out.println("1.Add New Address Book");
+            System.out.println("2.Exit");
+            System.out.println("Enter choice: ");
+            int option = sc.nextInt();
+            switch (option){
+                case 1: {
+                    System.out.println("Enter the Name of Address Book: ");
+                    String addressBookName = sc.next();
+                    if(addressBookMain.addressBookListMap.containsKey(addressBookName)){
+                        System.out.println("The Address book Already Exists");
+                        break;
+                    }else {
+                        addressBookMain.addAddressBook(addressBookName);
+                        break;
+                    }
+                }
+                case 2:{
+                    flag = false;
+                    break;
+                }
+            }
         }
-        for (String str : personDetail)
-        {
-            System.out.println(str + " "); 
-        }
-	}
-	/**
-	 * all functions are passes in main function to perform .
-	 * @param args
-	 */
-	public static void main(String[] args) 
-	{
-        System.out.println("Welcome in Address Book");
-        ArrayList<String> personDetail= createContact();
-        Scanner input = new Scanner(System.in);
-        System.out.print("Enter the First name : ");
-        String fname = input.nextLine();
-        System.out.print("What you want to perform ? Press 1 for Add the details , press 2 for edit the details , press 3 for delete the details : ");
-        int option = input.nextInt();
-        switch(option)
-        {
-        	case 1:
-        		createContact();
-        	break;
-        	case 2:
-        		editContact(personDetail);
-        	break;
-        	case 3:
-        		deleteContact(personDetail);
-        	break;
-        	default:
-        		System.out.print("Please enter the valid number : ");	
-        } 
-	}
+
+
+    }
 }
