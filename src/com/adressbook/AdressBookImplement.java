@@ -5,7 +5,8 @@ import java.util.Scanner;
 
 
 public class AdressBookImplement implements MultipleAddressBook {
-	public Map<String, ArrayList<AddressBook>> book;
+	public enum IOService{CONSOLE_IO,FILE_IO,DB_IO,REST_IO}
+    public Map<String, ArrayList<AddressBook>> book;
     public Map<String, ArrayList<AddressBook>> multibook;
     public Map<String, ArrayList<AddressBook>> city;
     public Map<String, ArrayList<AddressBook>> state;
@@ -165,7 +166,8 @@ public class AdressBookImplement implements MultipleAddressBook {
      */
     public boolean makechoice() {
         System.out.println("enter \n1:add_contact \n2:view_by_city \n3:view_by_state \n4:edit_contact \n5:delete_contact" +
-                " \n6:person_by_city_or_state \n7:Get_NoOfContacts \n8:Sort Alphabetically \n0: Quit");
+                            " \n6:person_by_city_or_state \n7:Get_NoOfContacts \n8:Sort Alphabetically \n9:Sort by CityOrStateOrZip " +
+                            "\n10:Write address in system file \n11:Read address in system file \n0:Quit");
         int check = obj.nextInt();
         boolean conditon = true;
         switch (check) {
@@ -192,6 +194,15 @@ public class AdressBookImplement implements MultipleAddressBook {
                 break;
             case 8:
                 sortAlphabetically();
+                break;
+            case 9:
+                sortCityStateOrZip();
+                break;
+            case 10:
+                writeAddressBookInFiles(IOService.FILE_IO);
+                break;
+            case 11:
+                readAddressBookInFiles(IOService.FILE_IO);
                 break;
             case 0:
                 conditon = false;
@@ -284,6 +295,26 @@ public class AdressBookImplement implements MultipleAddressBook {
                         .sorted(Map.Entry.comparingByKey())
                         .forEach(System.out::println);
                 break;
+        }
+    }
+    /**
+     * this method add data to the file.
+     * @param ioService
+     */
+    public void writeAddressBookInFiles(IOService ioService){
+        if (ioService.equals(IOService.FILE_IO)) {
+            new AddressBookFileIO().writeData(entries);
+            System.out.println("Data stored successfully in /IdeaProjects/AddressBook/AddressBook.txt");
+        }
+    }
+    /**
+     * this method will read the data from the file.
+     * @param ioService
+     */
+    public void readAddressBookInFiles(IOService ioService){
+        if (ioService.equals(IOService.FILE_IO)) {
+            new AddressBookFileIO().readData();
+            System.out.println("Data Read successfully From /IdeaProjects/AddressBook/AddressBook.txt");
         }
     }
 }
